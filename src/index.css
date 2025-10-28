@@ -11,37 +11,39 @@ html, body {
 }
 
 /* Shift all main content right */
-main {
-  margin-left: 180px;
-}
+main { margin-left: 180px; }
 
 /* ===== Navbar ===== */
 .sidebar-fixed {
   position: fixed;
-  top: 18vh; /* lowered to align with About section */
+  top: 18vh; /* aligned with sections */
   left: 2rem;
   z-index: 10;
 }
 
-.sidebar-fixed ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
+.sidebar-fixed ul { list-style: none; padding: 0; margin: 0; }
+.sidebar-fixed li { margin: 1rem 0; }
 
-.sidebar-fixed li {
-  margin: 1rem 0;
-}
-
-.sidebar-fixed a {
+/* links + buttons appear identical */
+.sidebar-fixed a,
+.sidebar-fixed .navlink {
   color: #111;
   text-decoration: none;
   font-weight: 500;
-  transition: opacity 0.2s ease-in-out;
+  transition: opacity .2s ease-in-out;
 }
 
-.sidebar-fixed a:hover {
-  opacity: 0.7;
+.sidebar-fixed a:hover,
+.sidebar-fixed .navlink:hover { opacity: .7; }
+
+/* reset button look */
+.navlink {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
 }
 
 /* ===== Hero Carousel ===== */
@@ -54,27 +56,11 @@ main {
   justify-content: center;
   margin-left: auto;
   overflow: hidden;
-  background: radial-gradient(circle at center,
-    #fbfbfb 0%,
-    #f7f7f7 60%,
-    #f3f3f3 100%
-  );
+  background: radial-gradient(circle at center, #fbfbfb 0%, #f7f7f7 60%, #f3f3f3 100%);
 }
 
-.carousel {
-  width: 88%;
-  height: 82vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.carousel .slide {
-  background: transparent !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+.carousel { width: 88%; height: 82vh; display: flex; align-items: center; justify-content: center; }
+.carousel .slide { background: transparent !important; display: flex; justify-content: center; align-items: center; }
 
 .carousel-card {
   position: relative;
@@ -83,29 +69,19 @@ main {
   border-radius: 18px;
   overflow: hidden;
   background: #ffffff;
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.15),
-    0 3px 10px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 10px 30px rgba(0,0,0,.15), 0 3px 10px rgba(0,0,0,.07);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform .3s ease, box-shadow .3s ease;
 }
 
 .carousel-card:hover {
   transform: translateY(-3px);
-  box-shadow:
-    0 14px 35px rgba(0, 0, 0, 0.18),
-    0 5px 14px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 14px 35px rgba(0,0,0,.18), 0 5px 14px rgba(0,0,0,.08);
 }
 
-.carousel-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 18px;
-  display: block;
-}
+.carousel-video { width: 100%; height: 100%; object-fit: cover; border-radius: 18px; display: block; }
 
 /* ===== Intro Overlay ===== */
 .overlay {
@@ -124,52 +100,36 @@ main {
   text-align: center;
 }
 
-.overlay.show {
-  opacity: 1;
-  transform: translateY(0);
-}
+.overlay.show { opacity: 1; transform: translateY(0); }
 
 .overlay-box {
   margin: auto;
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255,255,255,.75);
   padding: 2.5rem 4rem;
   border-radius: 14px;
-  box-shadow:
-    0 8px 28px rgba(0, 0, 0, 0.15),
-    0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 28px rgba(0,0,0,.15), 0 2px 8px rgba(0,0,0,.08);
   width: fit-content;
   max-width: 60%;
   text-align: center;
 }
 
-.overlay-box h1 {
-  font-size: 3rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #111;
-}
+.overlay-box h1 { font-size: 3rem; font-weight: 600; margin-bottom: 1rem; color: #111; }
+.overlay-box p  { font-size: 1.2rem; color: #333; }
 
-.overlay-box p {
-  font-size: 1.2rem;
-  color: #333;
-}
-
-/* ===== About Section ===== */
+/* ===== About Section (kept if you still use it) ===== */
 .about-section {
   position: relative;
-  top: 3vh; /* brings it up to align with nav */
+  top: 3vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  min-height: 40vh; /* shorter */
+  min-height: 40vh;
   max-width: 60%;
   margin-left: 220px;
   background: #fafafa;
   border-radius: 14px;
-  box-shadow:
-    0 8px 28px rgba(0, 0, 0, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 8px 28px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.04);
   padding: 2rem 3rem;
   text-align: left;
 }
@@ -177,59 +137,54 @@ main {
 .about-section h2 {
   font-size: 1.8rem;
   font-weight: 600;
-  margin-bottom: 0.75rem;
+  margin-bottom: .75rem;
   border-bottom: 1px solid #ddd;
-  padding-bottom: 0.3rem;
+  padding-bottom: .3rem;
 }
 
-.about-section p {
-  font-size: 1.05rem;
-  line-height: 1.6;
-  color: #333;
-  max-width: 90%;
+.about-section p { font-size: 1.05rem; line-height: 1.6; color: #333; max-width: 90%; }
+
+/* ===== Shared Card for dynamic content (Projects/Experience) ===== */
+.card {
+  position: relative;
+  top: 3vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 32vh;          /* tighter than About */
+  max-width: 60%;
+  margin-left: 220px;
+  background: #fafafa;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12), 0 3px 10px rgba(0,0,0,.06);
+  padding: 2rem 3rem;
+  text-align: left;
 }
+
+.card h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: .75rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: .3rem;
+}
+
+.card p { font-size: 1.05rem; line-height: 1.6; color: #333; max-width: 95%; }
 
 /* ===== Utility Animations ===== */
-.fade-in {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 1s ease, transform 1s ease;
-}
-
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+.fade-in { opacity: 0; transform: translateY(40px); transition: opacity 1s ease, transform 1s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
 
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
-  main {
-    margin-left: 0;
-  }
-
-  .hero-carousel {
-    width: 100%;
-  }
-
-  .about-section {
-    margin-left: 0;
-    max-width: 90%;
-    padding: 2rem;
-  }
-
-  .sidebar-fixed {
-    position: static;
-    transform: none;
-    display: flex;
-    justify-content: center;
-    padding-top: 1rem;
-  }
-
-  .sidebar-fixed ul {
-    display: flex;
-    gap: 1.5rem;
-  }
+  main { margin-left: 0; }
+  .hero-carousel { width: 100%; }
+  .about-section, .card { margin-left: 0; max-width: 90%; padding: 2rem; }
+  .sidebar-fixed { position: static; transform: none; display: flex; justify-content: center; padding-top: 1rem; }
+  .sidebar-fixed ul { display: flex; gap: 1.5rem; }
 }
+
 
 
 

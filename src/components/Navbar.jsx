@@ -1,15 +1,16 @@
-import React from 'react'
-import '../index.css'
+import React from "react";
+import "../index.css";
 
-const Navbar = () => (
-  <nav className="sidebar">
-    <ul>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#blog">Blog</a></li>
-      <li><a href="#cooking">Cooking Calendar</a></li>
-    </ul>
-  </nav>
-)
-
-export default Navbar
+export default function Navbar({ onSelect }) {
+  return (
+    <nav className="sidebar-fixed">
+      <ul>
+        <li><button className="navlink" onClick={() => onSelect("about")}>About Me</button></li>
+        <li><button className="navlink" onClick={() => onSelect("projects")}>Projects</button></li>
+        <li><button className="navlink" onClick={() => onSelect("experience")}>Experience</button></li>
+        <li><a className="navlink" href="#blog">Blog</a></li>
+        <li><a className="navlink" href="#cooking">Cooking Calendar</a></li>
+      </ul>
+    </nav>
+  );
+}
