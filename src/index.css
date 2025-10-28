@@ -1,6 +1,10 @@
 /* ===== Global ===== */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
 
+:root {
+  --hero-gutter-left: 10px;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -10,15 +14,43 @@ html, body {
   scroll-behavior: smooth;
 }
 
-/* Shift all main content right */
+/* ===== Layout ===== */
 main {
-  margin-left: 180px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+main > section:not(.hero-section) {
+  display: flex;
+  justify-content: center; /* ✅ centers horizontally */
+  align-items: flex-start;
+  width: 100%;
+  padding-left: 180px; /* leaves room for sidebar */
+  box-sizing: border-box;
+}
+
+/* ===== Hero Section Wrapper ===== */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* full screen */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertical center */
+  align-items: center;     /* horizontal center */
+  background: radial-gradient(circle at center,
+    #fefefe 0%, #f8f8f8 70%, #f2f2f2 100%
+  );
+  padding-top: 6vh; /* space from top / navbar */
+  box-sizing: border-box;
 }
 
 /* ===== Navbar ===== */
 .sidebar-fixed {
   position: fixed;
-  top: 18vh; /* lowered to align with About section */
+  top: 14vh; /* moved slightly lower for visual balance */
   left: 2rem;
   z-index: 10;
 }
@@ -44,75 +76,62 @@ main {
   opacity: 0.7;
 }
 
-/* ===== Hero Carousel ===== */
-.hero-carousel {
+/* ===== Hero Marquee ===== */
+.hero-marquee {
   position: relative;
-  width: calc(100% - 180px);
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: calc(100% - var(--hero-gutter-left));
+  height: 60vh;
   margin-left: auto;
-  overflow: hidden;
-  background: radial-gradient(circle at center,
-    #fbfbfb 0%,
-    #f7f7f7 60%,
-    #f3f3f3 100%
-  );
-}
-
-.carousel {
-  width: 88%;
-  height: 82vh;
   display: flex;
   align-items: center;
-  justify-content: center;
-}
-
-.carousel .slide {
-  background: transparent !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.carousel-card {
-  position: relative;
-  width: 96%;
-  height: 82vh;
-  border-radius: 18px;
+  justify-content: center; /* ✅ centers horizontally */
   overflow: hidden;
-  background: #ffffff;
+  background: linear-gradient(180deg, #fdfdfd 0%, #f8f8f8 100%);
+  border-bottom: 1px solid #eee;
+  transition: filter 900ms ease;
+}
+
+.hero-marquee.blurred {
+  filter: blur(10px) brightness(0.92);
+}
+
+/* ===== Marquee Cards ===== */
+.marquee-card {
+  width: 340px; /* slightly wider for balance */
+  height: 55vh; /* proportional */
+  margin: 0 30px;
+  border-radius: 16px;
+  background: #fff;
   box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.15),
-    0 3px 10px rgba(0, 0, 0, 0.07);
+    0 10px 25px rgba(0, 0, 0, 0.1),
+    0 4px 10px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.carousel-card:hover {
-  transform: translateY(-3px);
+.marquee-card:hover {
+  transform: translateY(-4px);
   box-shadow:
-    0 14px 35px rgba(0, 0, 0, 0.18),
-    0 5px 14px rgba(0, 0, 0, 0.08);
+    0 14px 35px rgba(0, 0, 0, 0.15),
+    0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
-.carousel-video {
+.marquee-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 18px;
-  display: block;
+  border-radius: 16px;
 }
 
 /* ===== Intro Overlay ===== */
 .overlay {
   position: absolute;
   top: 0;
-  left: 180px;
-  width: calc(100% - 180px);
+  left: var(--hero-gutter-left);
+  width: calc(100% - var(--hero-gutter-left));
   height: 100%;
   backdrop-filter: blur(12px);
   display: flex;
@@ -157,21 +176,21 @@ main {
 /* ===== About Section ===== */
 .about-section {
   position: relative;
-  top: 3vh; /* brings it up to align with nav */
+  top: 5vh;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center; /* ✅ center horizontally */
   justify-content: flex-start;
-  min-height: 40vh; /* shorter */
-  max-width: 60%;
-  margin-left: 220px;
+  min-height: 40vh;
+  width: 60%; /* fixed width column */
   background: #fafafa;
   border-radius: 14px;
   box-shadow:
     0 8px 28px rgba(0, 0, 0, 0.08),
     0 2px 8px rgba(0, 0, 0, 0.04);
   padding: 2rem 3rem;
-  text-align: left;
+  text-align: center;
+  margin: 0 auto; /* ✅ centers it within flex parent */
 }
 
 .about-section h2 {
@@ -187,18 +206,7 @@ main {
   line-height: 1.6;
   color: #333;
   max-width: 90%;
-}
-
-/* ===== Utility Animations ===== */
-.fade-in {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 1s ease, transform 1s ease;
-}
-
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
+  margin: 0 auto;
 }
 
 /* ===== Responsive ===== */
@@ -207,7 +215,7 @@ main {
     margin-left: 0;
   }
 
-  .hero-carousel {
+  .hero-marquee {
     width: 100%;
   }
 
@@ -230,6 +238,8 @@ main {
     gap: 1.5rem;
   }
 }
+
+
 
 
 

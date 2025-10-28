@@ -1,9 +1,15 @@
-import React from "react";
-import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+import React, { useEffect, useState } from "react";
+import Marquee from "react-fast-marquee";
 import "../index.css";
 
 const HeroCarousel = () => {
+  const [blurred, setBlurred] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setBlurred(true), 4000); // slow reveal
+    return () => clearTimeout(t);
+  }, []);
+
   const videos = [
     "/videos/clip1.mp4",
     "/videos/clip2.mp4",
@@ -13,38 +19,21 @@ const HeroCarousel = () => {
   ];
 
   return (
-    <div className="hero-carousel">
-      <Carousel
-        autoPlay
-        infiniteLoop
-        interval={3000}
-        transitionTime={800}
-        showThumbs={false}
-        showStatus={false}
-        showIndicators={false}
-        showArrows={false}
-        swipeable={false}
-        stopOnHover={false}
-      >
+    <div className={`hero-marquee ${blurred ? "blurred" : ""}`}>
+      <Marquee speed={25} gradient={false} pauseOnHover={false} autoFill>
         {videos.map((src, i) => (
-          <div key={i} className="carousel-card">
-            <video
-              src={src}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              className="carousel-video"
-            />
+          <div key={i} className="marquee-card">
+            <video src={src} autoPlay loop muted playsInline preload="auto" className="marquee-video" />
           </div>
         ))}
-      </Carousel>
+      </Marquee>
     </div>
   );
 };
 
 export default HeroCarousel;
+
+
 
 
 
