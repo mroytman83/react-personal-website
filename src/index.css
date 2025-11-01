@@ -191,5 +191,37 @@ main { margin-left: 180px; }
 }
 
 
+/* Blog */
+.blog-card {
+  margin-top: 2rem;
+  padding: 1.5rem 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
 
+.blog-card h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: .5rem;
+}
+
+.blog-card .blog-date {
+  font-size: .9rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.blog-card p {
+  line-height: 1.6;
+  font-size: 1.05rem;
+  color: #333;
+}
+
+.blog-card code {
+  background: #f4f4f4;
+  border-radius: 4px;
+  padding: 0.15rem 0.3rem;
+  font-family: monospace;
+}
 
