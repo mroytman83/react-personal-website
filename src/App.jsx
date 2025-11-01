@@ -8,10 +8,12 @@ export default function App() {
   const [section, setSection] = useState("about");
 
   useEffect(() => {
-    // smooth focus on the card when switching
-    const el = document.getElementById("content-card");
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (section !== "about") {
+      const el = document.getElementById("content-card");
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }, [section]);
+  
 
   const renderBody = () => {
     if (section === "projects")
