@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import HeroCarousel from "./components/HeroCarousel";
 import IntroOverlay from "./components/IntroOverlay";
 import Navbar from "./components/Navbar";
-import BlogLoader from "./components/BlogLoader"; // 👈 new
+import ClippyAgent from "./components/ClippyAgent";
+import BlogLoader from "./components/BlogLoader"; 
 import "./index.css";
 
 export default function App() {
@@ -116,6 +117,9 @@ export default function App() {
 
         {/* Only load blog markdowns when in Blog view */}
         {section === "blog" && <BlogLoader />}
+
+        {process.env.REACT_APP_MY_VAR && <ClippyAgent />}
+
       </main>
     </>
   );
