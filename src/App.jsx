@@ -25,6 +25,10 @@ export default function App() {
             <h2>Projects</h2>
 
             <p>
+              <strong> Live MMA Tracking Analytics — YOLOv8, DeepSORT, Kafka, Docker, Flask, D3.js </strong><br/>
+              Real-time fight tracking and streaming analytics with per-frame action detection and a live dashboard.
+            </p>
+            <p>
               <strong>Knoweo — Streamlit, Flask, AWS EC2, Whisper, HuggingFace</strong><br />
               AI tool that converts course materials into short-form videos using diffusion,
               TTS, and LLMs on AWS; Alumni Award, Transcend 2024.
@@ -39,11 +43,6 @@ export default function App() {
             <p>
               <strong>Hold on to Data — YOLOv8, PyTorch, RoboFlow</strong><br />
               Evaluated data augmentation for improving rock-climbing hold detection with YOLOv8.
-            </p>
-
-            <p>
-              <strong>Personal Portfolio — Node.js, Express, LangChain, Faiss</strong><br />
-              Website with SMTP contact form and a LangChain RAG chatbot using PubMed articles.
             </p>
           </>
         );
@@ -82,7 +81,7 @@ export default function App() {
           <>
             <h2>Blog</h2>
             <p style={{ marginBottom: "1rem" }}>
-              Posts rendered directly from <code>/src/posts</code> using Markdown.
+              Just sharing my thoughts on existence once in a while
             </p>
             <div id="blog-container"></div>
           </>
@@ -93,7 +92,7 @@ export default function App() {
           <>
             <h2>About Me</h2>
             <p>
-              Software developer and data engineer passionate about building elegant, scalable systems.
+              Software developer passionate about building elegant and scalable data-centric systems.
               Experienced across data modeling, backend engineering, and creative AI tools.
             </p>
           </>
