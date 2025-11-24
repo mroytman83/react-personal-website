@@ -15,15 +15,20 @@ html, body {
   scroll-margin-top: 0;
 }
 
+#root {
+  display: flex;
+  align-items: flex-start;
+}
 
-main { margin-left: 180px; }
 
 /* ===== Navbar ===== */
 .sidebar-fixed {
-  position: fixed;
-  top: 18vh; /* aligned with sections */
-  left: 2rem;
+  position: sticky;   /* instead of fixed */
+  top: 18vh;
+  margin-left: 2rem;  /* keeps the same visual offset as before */
   z-index: 10;
+  flex-shrink: 0;     /* don’t let it collapse when the window is narrow */
+  /* remove: left: 2rem; */
 }
 
 .sidebar-fixed ul { list-style: none; padding: 0; margin: 0; }
@@ -52,16 +57,27 @@ main { margin-left: 180px; }
 }
 
 /* ===== Hero Carousel ===== */
+.hero-section {
+  position: relative;
+}
+
+
 .hero-carousel {
   position: relative;
-  width: calc(100% - 180px);
-  height: 100vh;
+  /* Let it fill the main content area like the card */
+  width: 100%;
+  max-width: 60%;
+  margin: 0 auto;
+
+  height: 82vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: auto;
   overflow: hidden;
+
   background: radial-gradient(circle at center, #fbfbfb 0%, #f7f7f7 60%, #f3f3f3 100%);
+  box-shadow: 0 10px 30px rgba(0,0,0,.15), 0 3px 10px rgba(0,0,0,.07);
+  border-radius: 18px;
 }
 
 .carousel { width: 88%; height: 82vh; display: flex; align-items: center; justify-content: center; }
@@ -73,7 +89,7 @@ main { margin-left: 180px; }
   height: 82vh;
   border-radius: 18px;
   overflow: hidden;
-  background: #ffffff;
+  background: #000; /* Changed from #ffffff to dark background */
   box-shadow: 0 10px 30px rgba(0,0,0,.15), 0 3px 10px rgba(0,0,0,.07);
   display: flex;
   align-items: center;
@@ -86,14 +102,21 @@ main { margin-left: 180px; }
   box-shadow: 0 14px 35px rgba(0,0,0,.18), 0 5px 14px rgba(0,0,0,.08);
 }
 
-.carousel-video { width: 100%; height: 100%; object-fit: cover; border-radius: 18px; display: block; }
+.carousel-video { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  object-position: center;
+  border-radius: 0; /* Changed from 18px to 0 */
+  display: block; 
+}
 
 /* ===== Intro Overlay ===== */
 .overlay {
   position: absolute;
   top: 0;
-  left: 180px;
-  width: calc(100% - 180px);
+  left: 0;      
+  width: 100%;   
   height: 100%;
   backdrop-filter: blur(12px);
   display: flex;
@@ -104,6 +127,7 @@ main { margin-left: 180px; }
   transform: translateY(15px);
   text-align: center;
 }
+
 
 .overlay.show { opacity: 1; transform: translateY(0); }
 
@@ -149,17 +173,17 @@ main { margin-left: 180px; }
 
 .about-section p { font-size: 1.05rem; line-height: 1.6; color: #333; max-width: 90%; }
 
-/* ===== Shared Card for dynamic content (Projects/Experience) ===== */
+/* ===== shared card for dynamic content ===== */
 .card {
   position: relative;
-  top: 3vh;
+  top: 10vh;
   display: flex;
+  margin: 0 auto;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
-  min-height: 32vh;          /* tighter than About */
+  min-height: 32vh;         
   max-width: 60%;
-  margin-left: 220px;
   background: #fafafa;
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(0,0,0,.12), 0 3px 10px rgba(0,0,0,.06);
@@ -183,12 +207,66 @@ main { margin-left: 180px; }
 
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
-  main { margin-left: 0; }
-  .hero-carousel { width: 100%; }
-  .about-section, .card { margin-left: 0; max-width: 90%; padding: 2rem; }
-  .sidebar-fixed { position: static; transform: none; display: flex; justify-content: center; padding-top: 1rem; }
-  .sidebar-fixed ul { display: flex; gap: 1.5rem; }
+  /* Stack navbar above content instead of side-by-side */
+  #root {
+    display: block;
+  }
+
+  main {
+    margin-left: 0;
+    padding: 0 1rem 3rem; /* small horizontal padding */
+  }
+
+  /* Navbar becomes a top bar, centered */
+  .sidebar-fixed {
+    position: static;
+    transform: none;
+    width: 100%;
+    margin: 0;
+    padding-top: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .sidebar-fixed ul {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Hero + overlay full-width & centered */
+  .hero-section {
+    position: relative;
+    margin-top: 1rem;
+  }
+
+  .hero-carousel {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .overlay {
+    left: 0;              /* was 180px */
+    width: 100%;          /* was calc(100% - 180px) */
+    padding: 0 1rem;      /* keep some side padding */
+  }
+
+  .overlay-box {
+    max-width: 100%;
+    padding: 1.8rem 1.6rem;
+  }
+
+  /* Content cards full-width and centered */
+  .about-section,
+  .card {
+    margin-left: 0;
+    max-width: 100%;
+    padding: 1.8rem 1.6rem;
+  }
 }
+
 
 
 /* Blog */
@@ -231,11 +309,12 @@ main { margin-left: 180px; }
   inset: 0;
   background: rgba(255, 255, 255, 0.35);
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  z-index: 1000;
-  padding-bottom: 12%;
+  align-items: center;      /* center vertically */
+  justify-content: center;  /* center horizontally */
+  z-index: 2000;            /* above overlay/navbar/anything */
+  padding: 0;               /* no extra offset */
 }
+
 
 .clippy-dialog {
   background: #ffffff;
@@ -261,13 +340,15 @@ main { margin-left: 180px; }
 
 .clippy-dialog input {
   width: 100%;
-  padding: 0.6rem;
+  max-width: 280px;      /* keeps it nicely centered */
+  margin: 0 auto 1.2rem; /* centers the input inside dialog */
+  display: block;        /* ensures centering works */
+  padding: 0.65rem 0.75rem;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
-  margin-bottom: 1.2rem;
   outline: none;
-  transition: 0.2s;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .clippy-dialog input:focus {

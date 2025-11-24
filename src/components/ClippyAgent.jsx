@@ -45,8 +45,17 @@ export default function ClippyAgent() {
   }
 
   useEffect(() => {
+    // Check if mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+    if (isMobile) {
+      console.log("Skipping Clippy on mobile (audio autoplay is blocked).");
+      return;
+    }
+
     // random delay between 1–3 minutes
-    const randomDelay = Math.floor(Math.random() * (180000 - 60000 + 1)) + 60000;
+    const randomDelay =  Math.floor(Math.random() * (180000 - 60000 + 1)) + 60000;
 
     const timer = setTimeout(() => {
       if (!window.clippy) return console.warn("⚠️ ClippyJS not loaded");
@@ -55,6 +64,10 @@ export default function ClippyAgent() {
         "https://cdn.jsdelivr.net/gh/pi0/clippyjs@master/assets/agents/";
 
       window.clippy.load("Merlin", (a) => {
+        a._playSound = () => Promise.resolve(); 
+        a.play = () => {};                      
+        a._sounds = {};
+
         a.show();
 
         const x = window.innerWidth - 200;
@@ -91,7 +104,7 @@ export default function ClippyAgent() {
     modal.className = "clippy-modal";
     modal.innerHTML = `
       <div class="clippy-dialog">
-        <h3>Clippy’s Challenge </h3>
+        <h3>Clippy's Challenge </h3>
         <p>Enter your answer to the following ciphered question: <strong>${cipher}</strong></p>
         <small><i>All lowercase, with spaces preserved</i></small><br><br>
         <input type="text" id="clippy-input" placeholder="Type here..." />
@@ -105,7 +118,7 @@ export default function ClippyAgent() {
     Object.assign(modal.style, {
       position: "fixed",
       inset: 0,
-      background: "rgba(255,255,255,0.08)", // faint wash
+      background: "rgba(255,255,255,0.08)", 
       backdropFilter: "none",
       WebkitBackdropFilter: "none",
       display: "flex",
@@ -133,10 +146,6 @@ export default function ClippyAgent() {
     const cancel = modal.querySelector("#clippy-cancel");
     input.focus();
 
-
-
-
-    ///fix later 
     const closeModal = () => modal.remove();
 
     const handleCancel = () => {
