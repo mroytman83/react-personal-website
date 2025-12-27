@@ -15,6 +15,75 @@ html, body {
   scroll-margin-top: 0;
 }
 
+
+/* more complicated than necessary, lol just for footer */
+main {
+  flex: 1;
+}
+
+.site-footer {
+  margin-top: auto;
+  padding: 5rem 1rem 3rem; 
+  background: #fff;
+}
+
+.footer-divider {
+  max-width: 900px;
+  margin: 0 auto 4rem; 
+  border-top: 1px solid #e5e7eb;
+}
+
+.footer-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+}
+
+.footer-socials {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+}
+
+.footer-socials a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  color: #555;
+  background: #f5f5f5;
+  font-size: 1.5rem;
+  transition: all 0.25s ease;
+}
+
+.footer-socials a:hover {
+  color: #2563eb;
+  background: #e0e7ff;
+  transform: translateY(-2px);
+}
+
+.footer-copy {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+}
+/* END COMMENT*/
+
 #root {
   display: flex;
   align-items: flex-start;

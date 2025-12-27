@@ -4,6 +4,7 @@ import IntroOverlay from "./components/IntroOverlay";
 import Navbar from "./components/Navbar";
 import ClippyAgent from "./components/ClippyAgent";
 import BlogLoader from "./components/BlogLoader"; 
+import Footer from "./components/Footer";
 import "./index.css";
 
 export default function App() {
@@ -104,6 +105,7 @@ export default function App() {
     <>
       <Navbar onSelect={setSection} />
 
+      <div className="page">
       <main>
         <section className="hero-section">
           <HeroCarousel />
@@ -120,6 +122,9 @@ export default function App() {
         {process.env.REACT_APP_MY_VAR && <ClippyAgent />}
 
       </main>
+      {/* this is for the footer section */}
+      <Footer />
+      </div>
     </>
   );
 }
