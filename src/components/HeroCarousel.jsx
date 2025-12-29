@@ -30,11 +30,11 @@ const HeroCarousel = () => {
           <div key={i} className="carousel-card">
             <video
               src={src}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
+              loop={true}
+              muted={true}
+              autoPlay={true}
+              playsInline={true}
+              preload="metadata"
               className="carousel-video"
             />
           </div>
