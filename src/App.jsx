@@ -95,6 +95,8 @@ export default function App() {
             <p>
               Software developer passionate about building elegant and scalable data-centric systems.
               Experienced across data modeling, backend engineering, and creative AI tools.
+              <br/><br/>
+              Outside of work, I spend time on strength and movement training, and slow things down by exploring the outdoors, traveling, and learning languages.
             </p>
           </>
         );
