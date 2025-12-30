@@ -13,7 +13,7 @@ export default function App() {
   const bodyRef = useRef(null);
   const isAnimatingRef = useRef(false);
 
-  // smooth scroll only when switching, not on initial load
+  
   useEffect(() => {
     if (section !== "about") {
       const el = document.getElementById("content-card");
@@ -145,7 +145,6 @@ export default function App() {
 
   return (
     <>
-      {/* ONLY change: pass handleSelect instead of setSection */}
       <Navbar onSelect={handleSelect} />
 
       <div className="page">
