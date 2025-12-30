@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { gsap } from "gsap";
 import HeroCarousel from "./components/HeroCarousel";
 import IntroOverlay from "./components/IntroOverlay";
 import Navbar from "./components/Navbar";
 import ClippyAgent from "./components/ClippyAgent";
-import BlogLoader from "./components/BlogLoader"; 
+import BlogLoader from "./components/BlogLoader";
 import Footer from "./components/Footer";
 import "./index.css";
 
 export default function App() {
   const [section, setSection] = useState("about");
+  const bodyRef = useRef(null);
+  const isAnimatingRef = useRef(false);
 
   // smooth scroll only when switching, not on initial load
   useEffect(() => {
@@ -17,6 +20,43 @@ export default function App() {
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [section]);
+
+  const handleSelect = (next) => {
+    if (next === section) return;
+
+    const el = bodyRef.current;
+    if (!el) {
+      setSection(next);
+      return;
+    }
+
+    if (isAnimatingRef.current) return;
+    isAnimatingRef.current = true;
+
+    // OUT -> SWAP -> IN
+    gsap
+      .timeline({
+        defaults: { ease: "power2.out" },
+        onComplete: () => {
+          isAnimatingRef.current = false;
+        },
+      })
+      .to(el, {
+        autoAlpha: 0,
+        y: -10,
+        filter: "blur(6px)",
+        duration: 0.18,
+        overwrite: true,
+      })
+      .add(() => setSection(next))
+      .to(el, {
+        autoAlpha: 1,
+        y: 0,
+        filter: "blur(0px)",
+        duration: 0.28,
+        clearProps: "filter",
+      });
+  };
 
   const renderBody = () => {
     switch (section) {
@@ -105,30 +145,34 @@ export default function App() {
 
   return (
     <>
-      <Navbar onSelect={setSection} />
+      {/* ONLY change: pass handleSelect instead of setSection */}
+      <Navbar onSelect={handleSelect} />
 
       <div className="page">
-      <main>
-        <section className="hero-section">
-          <HeroCarousel />
-          <IntroOverlay />
-        </section>
+        <main>
+          <section className="hero-section">
+            <HeroCarousel />
+            <IntroOverlay />
+          </section>
 
-        <section id="content-card" className="card fade-in visible">
-          {renderBody()}
-        </section>
+          <section id="content-card" className="card fade-in visible">
+            {/* Wrap just the swappable content */}
+            <div ref={bodyRef}>
+              {renderBody()}
+            </div>
+          </section>
 
-        {/* Only load blog markdowns when in Blog view */}
-        {section === "blog" && <BlogLoader />}
+          {/* BlogLoader stays tied to section (works fine) */}
+          {section === "blog" && <BlogLoader />}
 
-        {process.env.REACT_APP_MY_VAR && <ClippyAgent />}
+          {process.env.REACT_APP_MY_VAR && <ClippyAgent />}
+        </main>
 
-      </main>
-      {/* this is for the footer section */}
-      <Footer />
+        <Footer />
       </div>
     </>
   );
 }
+
 
 
