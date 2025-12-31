@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import ClippyAgent from "./components/ClippyAgent";
 import BlogLoader from "./components/BlogLoader";
 import Footer from "./components/Footer";
+import ShowcaseHover from "./components/ShowcaseHover";
 import "./index.css";
 
 export default function App() {
@@ -64,29 +65,10 @@ export default function App() {
         return (
           <>
             <h2>Projects</h2>
-
-            <p>
-              <strong> Live MMA Tracking Analytics — YOLOv8, DeepSORT, Kafka, Docker, Flask, D3.js </strong><br/>
-              Real-time fight tracking and streaming analytics with per-frame action detection and a live dashboard.
-            </p>
-            <p>
-              <strong>Knoweo — Streamlit, Flask, AWS EC2, Whisper, HuggingFace</strong><br />
-              AI tool that converts course materials into short-form videos using diffusion,
-              TTS, and LLMs on AWS; Alumni Award, Transcend 2024.
-            </p>
-
-            <p>
-              <strong>CNBC Finance Articles Data — Selenium, GitHub Actions</strong><br />
-              Continuously updated JSON dataset of ~2.6k CNBC finance articles since Nov 2023
-              for research/education.
-            </p>
-
-            <p>
-              <strong>Hold on to Data — YOLOv8, PyTorch, RoboFlow</strong><br />
-              Evaluated data augmentation for improving rock-climbing hold detection with YOLOv8.
-            </p>
+            <p>Hover over the title of the project or tap if on mobile, to see a preview.</p>
+            <ShowcaseHover />
           </>
-        );
+          );
 
       case "experience":
         return (
