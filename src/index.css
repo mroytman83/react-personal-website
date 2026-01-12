@@ -1,6 +1,7 @@
 /* ===== Global ===== */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
 
+
 html, body {
   margin: 0;
   padding: 0;
@@ -9,7 +10,17 @@ html, body {
   color: #111;
   scroll-behavior: smooth;
   scroll-padding-top: 0 !important;
+  width: 100%;
+  overflow-x: hidden;
 }
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
 
 :target {
   scroll-margin-top: 0;
