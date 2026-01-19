@@ -5,7 +5,7 @@ const IntroOverlay = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setVisible(true), 12750);
+    const timer = setTimeout(() => setVisible(true), 17000);
     return () => clearTimeout(timer);
   }, []);
 
