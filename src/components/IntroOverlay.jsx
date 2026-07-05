@@ -13,9 +13,7 @@ const IntroOverlay = () => {
     <div className={`overlay ${visible ? "show" : ""}`}>
       <div className="overlay-box">
         <h1>Hi, I'm Michael</h1>
-        <p>Jack of a few trades.
-          <br></br>
-          Master of making them work together.</p>
+        <p>I like coding and being active </p>
       </div>
     </div>
   );
