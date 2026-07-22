@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
+import { initAgent } from "clippyjs";
+import Merlin from "clippyjs/agents/merlin";
+
+function muteSounds(agent) {
+  if (!agent._animator) return;
+  agent._animator._sounds = {};
+  agent._animator._playSound = () => {};
+}
 
 export default function ClippyAgent() {
-  const [agent, setAgent] = useState(null);
   const [tries, setTries] = useState(0);
-  const [active, setActive] = useState(false);
   const [visible, setVisible] = useState(true);
 
   function generateQuestion() {
@@ -33,19 +39,13 @@ export default function ClippyAgent() {
         continue;
       }
 
-      let shifted_index = proper_alphabet_dict[letter] + shift_value;
-      if (shifted_index >= 26) {
-        sphinx += changed_alphabet[shifted_index - 26];
-      } else {
-        sphinx += changed_alphabet[shifted_index];
-      }
+      sphinx += changed_alphabet[proper_alphabet_dict[letter]];
     }
 
     return sphinx;
   }
 
   useEffect(() => {
-    // Check if mobile device
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
     );
@@ -55,31 +55,29 @@ export default function ClippyAgent() {
     }
 
     // random delay between 1–3 minutes
-    const randomDelay =  Math.floor(Math.random() * (180000 - 60000 + 1)) + 60000;
+    const randomDelay = Math.floor(Math.random() * (180000 - 60000 + 1)) + 60000;
+    // const randomDelay = 100;
 
-    const timer = setTimeout(() => {
-      if (!window.clippy) return console.warn("⚠️ ClippyJS not loaded");
+    let loadedAgent = null;
+    let promptTimer = null;
+    let cancelled = false;
 
-      window.CLIPPY_CDN =
-        "https://cdn.jsdelivr.net/gh/pi0/clippyjs@master/assets/agents/";
+    const timer = setTimeout(async () => {
+      try {
+        loadedAgent = await initAgent(Merlin);
+        if (cancelled) {
+          loadedAgent.dispose();
+          return;
+        }
 
-      window.clippy.load("Merlin", (a) => {
-        a._playSound = () => Promise.resolve(); 
-        a.play = () => {};                      
-        a._sounds = {};
-
-        a.show();
+        muteSounds(loadedAgent);
+        loadedAgent.show();
 
         const x = window.innerWidth - 200;
         const y = window.innerHeight - 250;
-        a.moveTo(x, y);
-
-        setAgent(a);
-        setActive(true);
+        loadedAgent.moveTo(x, y);
 
         const cipher = generateQuestion();
-
-        // random greetings
         const greetings = [
           "Greetings, traveler. I bring you a puzzle.",
           "Ah, we meet again. I have a challenge for you.",
@@ -87,14 +85,21 @@ export default function ClippyAgent() {
         ];
         const greeting = greetings[Math.floor(Math.random() * greetings.length)];
 
-        a.speak(`${greeting} Solve this ciphered question: ${cipher}`);
+        loadedAgent.speak(`${greeting} Solve this ciphered question: ${cipher}`);
 
-        // keep Clippy showing the cipher longer before prompting
-        setTimeout(() => ask(a, cipher), 10000);
-      });
+        promptTimer = setTimeout(() => ask(loadedAgent, cipher), 10000);
+      } catch (err) {
+        console.warn("Failed to load ClippyJS", err);
+      }
     }, randomDelay);
 
-    return () => clearTimeout(timer);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+      clearTimeout(promptTimer);
+      loadedAgent?.dispose();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- one-time mount init
   }, []);
 
   const ask = (a, cipher) => {
@@ -118,7 +123,7 @@ export default function ClippyAgent() {
     Object.assign(modal.style, {
       position: "fixed",
       inset: 0,
-      background: "rgba(255,255,255,0.08)", 
+      background: "rgba(255,255,255,0.08)",
       backdropFilter: "none",
       WebkitBackdropFilter: "none",
       display: "flex",
@@ -154,7 +159,6 @@ export default function ClippyAgent() {
       a.speak("Coward! You dare not answer?");
       setTimeout(() => {
         a.hide();
-        setActive(false);
         setVisible(false);
       }, 2000);
     };
@@ -180,11 +184,9 @@ export default function ClippyAgent() {
           a.play("GetAttention");
           setTimeout(() => {
             a.hide();
-            setActive(false);
             setVisible(false);
           }, 2500);
         } else {
-          // progressive hints
           if (newTries === 1) {
             a.speak("Wrong! Try again... Here's a hint: it's a Caesar cipher.");
           } else if (newTries === 2) {
@@ -193,7 +195,6 @@ export default function ClippyAgent() {
             a.speak("Wrong! Try again...");
           }
 
-          // re-ask after hint
           setTimeout(() => {
             a.speak(`Solve this ciphered question: ${cipher}`);
             setTimeout(() => ask(a, cipher), 10000);
@@ -205,7 +206,3 @@ export default function ClippyAgent() {
 
   return null;
 }
-
-
-
-
