@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { initAgent } from "clippyjs";
 import Merlin from "clippyjs/agents/merlin";
 
@@ -8,9 +8,37 @@ function muteSounds(agent) {
   agent._animator._playSound = () => {};
 }
 
-export default function ClippyAgent() {
-  const [tries, setTries] = useState(0);
-  const [visible, setVisible] = useState(true);
+export default function ClippyAgent({ onUnlock }) {
+  const triesRef = useRef(0);
+  const dismissedRef = useRef(false);
+  const timersRef = useRef([]);
+
+  const clearPendingTimers = () => {
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
+  };
+
+  const scheduleTimer = (fn, delay) => {
+    const id = setTimeout(() => {
+      timersRef.current = timersRef.current.filter((timerId) => timerId !== id);
+      fn();
+    }, delay);
+    timersRef.current.push(id);
+    return id;
+  };
+
+  const dismissMerlin = (agent) => {
+    dismissedRef.current = true;
+    clearPendingTimers();
+    const message = "Coward! You dare not answer?";
+    if (!agent.play("GestureDown")) agent.animate();
+    agent.speak(message);
+
+    const speechMs = message.split(/\s+/).length * 200 + 2000;
+    scheduleTimer(() => {
+      agent.hide(false, () => agent.dispose());
+    }, speechMs + 500);
+  };
 
   function generateQuestion() {
     const question = (process.env.REACT_APP_MY_VAR || "").toLowerCase();
@@ -59,13 +87,12 @@ export default function ClippyAgent() {
     // const randomDelay = 100;
 
     let loadedAgent = null;
-    let promptTimer = null;
     let cancelled = false;
 
     const timer = setTimeout(async () => {
       try {
         loadedAgent = await initAgent(Merlin);
-        if (cancelled) {
+        if (cancelled || dismissedRef.current) {
           loadedAgent.dispose();
           return;
         }
@@ -87,7 +114,9 @@ export default function ClippyAgent() {
 
         loadedAgent.speak(`${greeting} Solve this ciphered question: ${cipher}`);
 
-        promptTimer = setTimeout(() => ask(loadedAgent, cipher), 10000);
+        scheduleTimer(() => {
+          if (!dismissedRef.current) ask(loadedAgent, cipher);
+        }, 10000);
       } catch (err) {
         console.warn("Failed to load ClippyJS", err);
       }
@@ -96,14 +125,14 @@ export default function ClippyAgent() {
     return () => {
       cancelled = true;
       clearTimeout(timer);
-      clearTimeout(promptTimer);
+      clearPendingTimers();
       loadedAgent?.dispose();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps -- one-time mount init
   }, []);
 
   const ask = (a, cipher) => {
-    if (!visible) return;
+    if (dismissedRef.current) return;
 
     const modal = document.createElement("div");
     modal.className = "clippy-modal";
@@ -155,12 +184,7 @@ export default function ClippyAgent() {
 
     const handleCancel = () => {
       closeModal();
-      a.play("GestureDown");
-      a.speak("Coward! You dare not answer?");
-      setTimeout(() => {
-        a.hide();
-        setVisible(false);
-      }, 2000);
+      dismissMerlin(a);
     };
     cancel.onclick = handleCancel;
 
@@ -172,20 +196,20 @@ export default function ClippyAgent() {
       closeModal();
 
       if (answer === correct) {
+        onUnlock?.();
         a.speak("Correct! You are wise indeed.");
         a.animate();
         a.hide();
       } else {
-        const newTries = tries + 1;
-        setTries(newTries);
+        const newTries = triesRef.current + 1;
+        triesRef.current = newTries;
 
         if (newTries >= 3) {
+          dismissedRef.current = true;
+          clearPendingTimers();
           a.speak("Foolish mortal. Farewell!");
           a.play("GetAttention");
-          setTimeout(() => {
-            a.hide();
-            setVisible(false);
-          }, 2500);
+          a.hide(false, () => a.dispose());
         } else {
           if (newTries === 1) {
             a.speak("Wrong! Try again... Here's a hint: it's a Caesar cipher.");
@@ -195,9 +219,12 @@ export default function ClippyAgent() {
             a.speak("Wrong! Try again...");
           }
 
-          setTimeout(() => {
+          scheduleTimer(() => {
+            if (dismissedRef.current) return;
             a.speak(`Solve this ciphered question: ${cipher}`);
-            setTimeout(() => ask(a, cipher), 10000);
+            scheduleTimer(() => {
+              if (!dismissedRef.current) ask(a, cipher);
+            }, 10000);
           }, 8000);
         }
       }

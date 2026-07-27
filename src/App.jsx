@@ -6,13 +6,25 @@ import Navbar from "./components/Navbar";
 import ClippyAgent from "./components/ClippyAgent";
 import BlogLoader from "./components/BlogLoader";
 import Footer from "./components/Footer";
+import PersonalSection from "./components/PersonalSection";
 import ShowcaseHover from "./components/ShowcaseHover";
 import "./index.css";
 
 export default function App() {
   const [section, setSection] = useState("about");
+  const [unlocked, setUnlocked] = useState(
+    () => sessionStorage.getItem("sphinx_unlocked") === "true"
+  );
+  const [personalReveal, setPersonalReveal] = useState(false);
   const bodyRef = useRef(null);
   const isAnimatingRef = useRef(false);
+
+  const handleUnlock = () => {
+    sessionStorage.setItem("sphinx_unlocked", "true");
+    setUnlocked(true);
+    setPersonalReveal(true);
+    setTimeout(() => setPersonalReveal(false), 4000);
+  };
 
   
   useEffect(() => {
@@ -110,6 +122,9 @@ export default function App() {
           </>
         );
 
+      case "personal":
+        return <PersonalSection />;
+
       default:
         return (
           <>
@@ -127,7 +142,7 @@ export default function App() {
 
   return (
     <>
-      <Navbar onSelect={handleSelect} />
+      <Navbar onSelect={handleSelect} unlocked={unlocked} personalReveal={personalReveal} />
 
       <div className="page">
         <main>
@@ -146,7 +161,9 @@ export default function App() {
           {/* BlogLoader stays tied to section (works fine) */}
           {section === "blog" && <BlogLoader />}
 
-          {process.env.REACT_APP_MY_VAR && <ClippyAgent />}
+          {process.env.REACT_APP_MY_VAR && (
+            <ClippyAgent onUnlock={handleUnlock} />
+          )}
         </main>
 
         <Footer />
